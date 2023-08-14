@@ -2,7 +2,9 @@ const request = require("supertest");
 const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index.js");
-const app = require('../app.js');
+const app = require("../app.js");
+const fs = require("fs/promises");
+const endpointObj = require("/Users/peterakin-nibosun/northcoders/backend/be-nc-news/endpoints.json")
 
 beforeEach(() => {
   return seed(data);
@@ -12,7 +14,8 @@ afterAll(() => db.end());
 
 describe("/api/topics", () => {
   test("GET:200 sends an array of topics to the client", () => {
-    return request(app).get("/api/topics")
+    return request(app)
+      .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
         const { topics } = body;
@@ -26,3 +29,14 @@ describe("/api/topics", () => {
   });
 });
 
+describe("/api", () => {
+  test("GET:200 sends object describing all the available endpoints in API", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(endpointObj);
+        expect(Object.keys(body).length).toBe(Object.keys(endpointObj).length);
+      });
+  });
+});
