@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index.js");
 const app = require("../app.js");
 const fs = require("fs/promises");
+const endpointObj = require("/Users/peterakin-nibosun/northcoders/backend/be-nc-news/endpoints.json")
 
 beforeEach(() => {
   return seed(data);
@@ -34,20 +35,8 @@ describe("/api", () => {
       .get("/api")
       .expect(200)
       .then(({ body }) => {
-        let count = 0;
-        for (const endpoint in body) {
-          count++;
-          expect(body[endpoint]).toHaveProperty(
-            "description",
-            expect.any(String)
-          );
-          expect(body[endpoint]).toHaveProperty("queries", expect.any(Array));
-          expect(body[endpoint]).toHaveProperty(
-            "exampleResponse",
-            expect.any(Object)
-          );
-        }
-        expect(Object.keys(body).length).toBe(count);
+        expect(body).toEqual(endpointObj);
+        expect(Object.keys(body).length).toBe(Object.keys(endpointObj).length);
       });
   });
 });
