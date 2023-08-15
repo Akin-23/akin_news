@@ -20,3 +20,14 @@ exports.formatComments = (comments, idLookup) => {
     };
   });
 };
+
+exports.formatCommentCount = (articleArray) => {
+  const newArticles = articleArray.map((article) => {
+    const newArticle = {...article};
+    newArticle.comment_count = Number(newArticle.comment_count);
+    return newArticle;
+  }) 
+  
+   return newArticles;
+};
+  
