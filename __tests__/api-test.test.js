@@ -36,7 +36,6 @@ describe("/api", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual(endpointObj);
-        expect(Object.keys(body).length).toBe(Object.keys(endpointObj).length);
       });
   });
 });
