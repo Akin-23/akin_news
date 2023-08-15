@@ -63,7 +63,7 @@ describe("/api/articles/:article_id", () => {
         const { msg } = body
         expect(msg).toBe("article does not exist");
       });
-    });
+  });
     
   test('GET:400 sends an appropriate error message when given an invalid id', () => {
     return request(app)
@@ -75,7 +75,41 @@ describe("/api/articles/:article_id", () => {
       });
     
   })
-  
+  test("GET:404 when given an incorrect path", () => {
+    return request(app)
+      .get("/api/notapath")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body
+        expect(msg).toBe("Not found");
+      });
   });
+});
 
+
+describe("/api/articles", () => {
+  test("GET:200 sends an array of articles in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Array.isArray(body)).toBe(true);
+        expect(body).toBeSortedBy("created_at", { descending: true, });
+        body.forEach((article) => {
+          if (article.article_id === 1) {
+              expect(article.comment_count).toBe(11)
+            }
+          expect(article).toHaveProperty("title",expect.any(String));
+          expect(article).toHaveProperty("author", expect.any(String));
+          expect(article).toHaveProperty("article_id", expect.any(Number));
+          expect(article).toHaveProperty("topic", expect.any(String));
+          expect(article).toHaveProperty("created_at", expect.any(String));
+          expect(article).toHaveProperty("votes", expect.any(Number));
+          expect(article).toHaveProperty("article_img_url", expect.any(String));
+          expect(article).toHaveProperty("comment_count", expect.any(Number));
+          expect(article).not.toHaveProperty("body")
+        });
+      });
+  });
+});
 
