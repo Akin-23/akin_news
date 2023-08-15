@@ -20,7 +20,6 @@ exports.getArticles = (req, res, next) => {
       res.status(200).send(formattedArticles);
     })
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };
