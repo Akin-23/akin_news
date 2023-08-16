@@ -3,7 +3,8 @@ const app = express();
 const { getTopics } = require("./controllers/topics-controller");
 const { getEndpoints } = require("./controllers/endpoints-controller");
 const { getArticle, getArticles } = require("./controllers/articles-controller");
-const { postComment } = require ("./controllers/comments-controller")
+const {getComments,postComment,} = require("./controllers/comments-controller");
+
 
 app.use(express.json());
 
@@ -11,7 +12,9 @@ app.get("/api/topics", getTopics);
 app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id", getArticle);
 app.get("/api/articles", getArticles);
-app.post("/api/articles/:article_id/comments",postComment);
+app.get("/api/articles/:article_id/comments", getComments);
+app.post("/api/articles/:article_id/comments", postComment);
+
 
 
 app.all('/*', (req, res) => {
@@ -32,7 +35,7 @@ app.use((err, request, response, next) => {
 
 app.use((err, request, response, next) => {
   if (err.code === "23503") {
-    response.status(400).send({ msg: "Username does not exist" });
+    response.status(400).send({ msg: "Bad request" });
   }
   next(err);
 });
