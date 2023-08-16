@@ -49,5 +49,21 @@
         "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
+  },
+
+
+  "GET /api/articles/:article_id/comments": {
+    "article": {
+      "description": "Responds with an array of comments associated with this particular id, most recent comments are first",
+      "queries": [],
+      "exampleResponse": {
+        "comment_id": 2,
+        "article_id": 1,
+        "body": "I find this existence challenging",
+        "created_at": "020-07-09T20:11:00.000Z",
+        "votes": 5,
+        "author": "Mr bean"
+      }
+    }
   }
 }
