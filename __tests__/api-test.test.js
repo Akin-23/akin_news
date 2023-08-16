@@ -113,25 +113,67 @@ describe("/api/articles", () => {
   });
 });
 
-// describe('POST /api/articles/:article_id/comments', () => {
-//   test("POST:201 inserts a new comment to the database and sends the new comment back to the user", () => {
-//     const newComment = {
-//       username: "Peter",
-//       body: "test body comment",
-//     };
-//     return request(app)
-//       .post('/api/articles/1/comments').send(newComment).expect(201)
+describe('/api/articles/:article_id/comments', () => {
+  test("POST:201 inserts a new comment to the database and sends the new comment back to the user", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "test body comment",
+    };
+    return request(app)
+      .post('/api/articles/1/comments').send(newComment).expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+                expect(comment).toHaveProperty("comment_id", 19);
+                expect(comment).toHaveProperty("votes", 0);
+                expect(comment).toHaveProperty("created_at", (expect.any(String)));
+                expect(comment).toHaveProperty("author", "rogersop");
+                expect(comment).toHaveProperty("body", "test body comment");
+                expect(comment).toHaveProperty("article_id", 1);
+            });      
+  })
+
+  test ("POST 400: responds with error message when provided invalid username ", () => {
+    const newComment = {
+      username: "Peter",
+      body : "Test test test"
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("Username does not exist");
+      });
+  });
+
+   test("POST 400: responds with error message when provided newComment without a body or username ", () => {
+     const newComment = {
+     };
+     return request(app)
+       .post("/api/articles/1/comments")
+       .send(newComment)
+       .expect(400)
+       .then(({ body }) => {
+         const { msg } = body;
+         expect(msg).toBe("Comment missing username/body");
+       });
+   });
+  
+//   test("POST 404: responds with error message when provided newComment without a article that does not exist ", () => {
+//  const newComment = {
+//    username: "rogersop",
+//    body: "test body comment",
+//  };    return request(app)
+//       .post("/api/articles/999/comments")
+//       .send(newComment)
+//       .expect(400)
 //       .then(({ body }) => {
-//         const comment = body;
-//                 expect(comment).toHaveProperty("comment_id", 19);
-//                 expect(comment).toHaveProperty("votes", 0);
-//                 expect(comment).toHaveProperty("created_at", (expect.any(String)));
-//                 expect(comment).toHaveProperty("author", "Peter");
-//                 expect(comment).toHaveProperty("body", "test body comment");
-//                 expect(comment).toHaveProperty("article_id", 1);
-//             });      
-//   })
-// });
+//         const { msg } = body;
+//         expect(msg).toBe("Comment missing username/body");
+//       });
+//   });
+});
   
 
 

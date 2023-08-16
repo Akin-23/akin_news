@@ -3,13 +3,16 @@ const app = express();
 const { getTopics } = require("./controllers/topics-controller");
 const { getEndpoints } = require("./controllers/endpoints-controller");
 const { getArticle, getArticles } = require("./controllers/articles-controller");
+const { postComment } = require ("./controllers/comments-controller")
 
-
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id", getArticle);
 app.get("/api/articles", getArticles);
+app.post("/api/articles/:article_id/comments",postComment);
+
 
 app.all('/*', (req, res) => {
     res.status(404).send({msg: 'Not found'})
@@ -25,6 +28,20 @@ app.use((err, request, response, next) => {
   if (err.code === "22P02") {
     response.status(400).send({ msg: "Invalid id" });
     } next(err);
+});
+
+app.use((err, request, response, next) => {
+  if (err.code === "23503") {
+    response.status(400).send({ msg: "Username does not exist" });
+  }
+  next(err);
+});
+
+app.use((err, request, response, next) => {
+  if (err.code === "23502") {
+    response.status(400).send({ msg: "Comment missing username/body" });
+  }
+  next(err);
 });
 
 
