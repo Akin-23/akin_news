@@ -113,3 +113,26 @@ describe("/api/articles", () => {
   });
 });
 
+// describe('POST /api/articles/:article_id/comments', () => {
+//   test("POST:201 inserts a new comment to the database and sends the new comment back to the user", () => {
+//     const newComment = {
+//       username: "Peter",
+//       body: "test body comment",
+//     };
+//     return request(app)
+//       .post('/api/articles/1/comments').send(newComment).expect(201)
+//       .then(({ body }) => {
+//         const comment = body;
+//                 expect(comment).toHaveProperty("comment_id", 19);
+//                 expect(comment).toHaveProperty("votes", 0);
+//                 expect(comment).toHaveProperty("created_at", (expect.any(String)));
+//                 expect(comment).toHaveProperty("author", "Peter");
+//                 expect(comment).toHaveProperty("body", "test body comment");
+//                 expect(comment).toHaveProperty("article_id", 1);
+//             });      
+//   })
+// });
+  
+
+
+
