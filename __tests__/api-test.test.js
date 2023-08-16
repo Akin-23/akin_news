@@ -113,3 +113,43 @@ describe("/api/articles", () => {
   });
 });
 
+describe("/api/articles/:article_id/comments", () => {
+  test("GET:200 an array of comments for the given article_id, with the most recent comments first", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Array.isArray(body)).toBe(true);
+        expect(body).toBeSortedBy("created_at", { descending: true });
+        body.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("votes", expect.any(Number));
+          expect(comment).toHaveProperty("created_at", expect.any(String));
+          expect(comment).toHaveProperty("author", expect.any(String));
+          expect(comment).toHaveProperty("body", expect.any(String));
+          expect(comment).toHaveProperty("article_id", 1);
+        });
+      });
+  });
+  test('GET:400 sends an appropriate error message when given an invalid id', () => {
+    return request(app)
+      .get("/api/articles/scooby/comments")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body
+        expect(msg).toBe("Invalid id");
+      });
+  })
+
+  test('GET:404 sends an appropriate message when given a valid but non-existent id', () => {
+    return request(app)
+      .get('/api/articles/999/comments')
+      .expect(404)
+      .then(({ body }) => {
+        const {msg} = body
+        expect(msg).toBe('article does not exist');
+      });
+
+  });
+  
+});

@@ -1,4 +1,4 @@
-const { selectArticle, selectArticles } = require("../models/articles-model");
+const { selectArticle, selectArticles, selectComments } = require("../models/articles-model");
 const { formatCommentCount } = require("../db/seeds/utils");
 
 exports.getArticle = (req, res, next) => {
@@ -23,3 +23,14 @@ exports.getArticles = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getComments = (req, res, next) => {
+  const { article_id } = req.params;
+  selectComments(article_id)
+    .then((comments) => {
+    res.status(200).send(comments)
+    })
+    .catch((err) => {
+      next(err);
+  })
+}
