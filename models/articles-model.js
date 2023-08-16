@@ -26,7 +26,7 @@ exports.selectArticles = () => {
 exports.selectComments = (article_id) => {
   return db
     .query(
-      `SELECT comments.* FROM comments JOIN articles ON comments.article_id = articles.article_id 
+      `SELECT comments.* FROM comments
        WHERE 
        comments.article_id = $1
        ORDER BY
@@ -34,10 +34,19 @@ exports.selectComments = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "article does not exist" });
-      }
-
       return rows;
     });
 };
+
+exports.checkArticleExists = (article_id) => {
+  return db.query(
+    `SELECT * FROM articles
+    WHERE 
+    article_id =$1`,[article_id]
+  ).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({status:404, msg: "article does not exist"})
+    }
+    
+  })
+}

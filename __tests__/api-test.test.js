@@ -119,9 +119,11 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/1/comments")
       .expect(200)
       .then(({ body }) => {
-        expect(Array.isArray(body)).toBe(true);
-        expect(body).toBeSortedBy("created_at", { descending: true });
-        body.forEach((comment) => {
+        const { comments } = body
+        expect(Array.isArray(comments)).toBe(true);
+        expect(comments.length).toBe(11)
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+        comments.forEach((comment) => {
           expect(comment).toHaveProperty("comment_id", expect.any(Number));
           expect(comment).toHaveProperty("votes", expect.any(Number));
           expect(comment).toHaveProperty("created_at", expect.any(String));
@@ -131,6 +133,18 @@ describe("/api/articles/:article_id/comments", () => {
         });
       });
   });
+
+  test("GET:200 responds with an empty array if id exist but there are no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const {comments} = body
+        expect(comments).toEqual([])
+      });
+  });
+
+
   test('GET:400 sends an appropriate error message when given an invalid id', () => {
     return request(app)
       .get("/api/articles/scooby/comments")
