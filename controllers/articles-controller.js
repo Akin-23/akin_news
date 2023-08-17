@@ -48,9 +48,9 @@ exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
   const promises = [removeComment(comment_id), checkCommentExists(comment_id)];
   Promise.all(promises)
-    .then((resolvedPromises) => {
-      const comment = resolvedPromises[0];
-      res.status(204).send(comment);
+    .then(() => {
+
+      res.status(204).send("");
     })
     .catch((err) => {
       next(err);

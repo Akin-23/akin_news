@@ -65,5 +65,14 @@
         "author": "Mr bean"
       }
     }
+  },
+
+  "DELETE /api/comments/:comment_id": {
+    "article": {
+      "description": "delete a comment with the provided comment_id",
+      "queries": [],
+      "exampleResponse": {
+      }
+    }
   }
 }
