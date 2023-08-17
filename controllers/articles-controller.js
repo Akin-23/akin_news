@@ -2,7 +2,6 @@ const {
   selectArticle,
   selectArticles,
   selectComments,
-  checkArticleExists,
 } = require("../models/articles-model");
 const { formatCommentCount } = require("../db/seeds/utils");
 
@@ -10,7 +9,7 @@ exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
   selectArticle(article_id)
     .then((article) => {
-      res.status(200).send({ article });
+      res.status(200).send({ article: article });
     })
     .catch((err) => {
       next(err);
@@ -22,22 +21,11 @@ exports.getArticles = (req, res, next) => {
     .then((articles) => {
       const formattedArticles = formatCommentCount(articles);
 
-      res.status(200).send(formattedArticles);
+      res.status(200).send({ articles: formattedArticles });
     })
     .catch((err) => {
       next(err);
     });
 };
 
-exports.getComments = (req, res, next) => {
-  const { article_id } = req.params;
-  const promises = [selectComments(article_id), checkArticleExists(article_id)];
-  Promise.all(promises)
-    .then((resolvedPromises) => {
-      const comments = resolvedPromises[0];
-      res.status(200).send({ comments: comments });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
+
