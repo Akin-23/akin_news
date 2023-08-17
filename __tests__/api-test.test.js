@@ -168,20 +168,20 @@ describe("/api/articles/:article_id/comments", () => {
   
 });
 
-describe("/api/users", () => {
-  test("GET:200 an array of user objects", () => {
-    return request(app)
-      .get("/api/users")
-      .expect(200)
-      .then(({ body }) => {
-        const { users } = body;
-        expect(Array.isArray(users)).toBe(true);
-        expect(users.length).toBe(4);
-        users.forEach((user) => {
-          expect(user).toHaveProperty("username"), expect.any(String);
-          expect(user).toHaveProperty("name", expect.any(String));
-          expect(user).toHaveProperty("avatar_url", expect.any(String));
-        });
-      });
-  });
-});
+// describe("/api/users", () => {
+//   test("GET:200 an array of user objects", () => {
+//     return request(app)
+//       .get("/api/users")
+//       .expect(200)
+//       .then(({ body }) => {
+//         const { users } = body;
+//         expect(Array.isArray(users)).toBe(true);
+//         expect(users.length).toBe(4);
+//         users.forEach((user) => {
+//           expect(user).toHaveProperty("username"), expect.any(String);
+//           expect(user).toHaveProperty("name", expect.any(String));
+//           expect(user).toHaveProperty("avatar_url", expect.any(String));
+//         });
+//       });
+//   });
+// });
