@@ -4,7 +4,7 @@ exports.selectArticle = (article_id) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
     .then(({ rows }) => {
-      if (rows.length === 0) {
+      if (!rows.length) {
         return Promise.reject({ status: 404, msg: "article does not exist" });
       }
       return rows[0];
@@ -23,30 +23,43 @@ exports.selectArticles = () => {
     });
 };
 
-exports.selectComments = (article_id) => {
+
+
+exports.checkArticleExists = (article_id) => {
   return db
     .query(
-      `SELECT comments.* FROM comments
-       WHERE 
-       comments.article_id = $1
-       ORDER BY
-       comments.created_at DESC;`,
+      `SELECT * FROM articles
+    WHERE 
+    article_id =$1`,
       [article_id]
     )
     .then(({ rows }) => {
-      return rows;
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "article does not exist" });
+      }
     });
 };
 
-exports.checkArticleExists = (article_id) => {
-  return db.query(
-    `SELECT * FROM articles
-    WHERE 
-    article_id =$1`,[article_id]
-  ).then(({ rows }) => {
-    if (!rows.length) {
-      return Promise.reject({status:404, msg: "article does not exist"})
-    }
-    
-  })
-}
+exports.updateArticle = ({ inc_votes }, article_id) => {
+
+  if (inc_votes === undefined) { 
+    inc_votes = 0;
+  };
+  
+  return db
+    .query(
+      `UPDATE articles
+        SET votes  = votes + $1
+        WHERE article_id = $2
+        RETURNING *`,
+      [inc_votes, article_id]
+    )
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "article not found" });
+      }
+      return rows[0];
+    });
+};
+
+
