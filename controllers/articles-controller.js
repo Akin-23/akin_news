@@ -4,6 +4,8 @@ const {
   selectComments,
   checkArticleExists,
   updateArticle,
+  checkCommentExists,
+  removeComment,
 } = require("../models/articles-model");
 const { formatCommentCount } = require("../db/seeds/utils");
 
@@ -43,5 +45,30 @@ exports.patchArticle = (req, res, next) => {
    .catch((err) => {
       next(err);
     });
+};
 
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const promises = [removeComment(comment_id), checkCommentExists(comment_id)];
+  Promise.all(promises)
+    .then(() => {
+
+      res.status(204).send("");
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const promises = [removeComment(comment_id), checkCommentExists(comment_id)];
+  Promise.all(promises)
+    .then(() => {
+
+      res.status(204).send("");
+    })
+    .catch((err) => {
+      next(err);
+    });
 }
