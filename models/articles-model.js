@@ -54,6 +54,11 @@ exports.checkArticleExists = (article_id) => {
 };
 
 exports.updateArticle = ({ inc_votes }, article_id) => {
+
+  if (inc_votes === undefined) { 
+    inc_votes = 0;
+  };
+  
   return db
     .query(
       `UPDATE articles
@@ -63,6 +68,9 @@ exports.updateArticle = ({ inc_votes }, article_id) => {
       [inc_votes, article_id]
     )
     .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "article not found" });
+      }
       return rows[0];
     });
 };
