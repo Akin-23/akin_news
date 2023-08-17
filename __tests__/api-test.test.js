@@ -167,3 +167,24 @@ describe("/api/articles/:article_id/comments", () => {
   });
   
 });
+
+describe("/api/comments/:comment_id", () => {
+  test("DELETE :204 delete the given comment by comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({body}) => {
+        expect(body).toEqual({});
+      });
+  });
+
+   test("DELETE :404 error message appears when comment_id doesn't exist", () => {
+     return request(app)
+       .delete("/api/comments/999")
+       .expect(404)
+       .then(({ body }) => {
+         const { msg } = body;
+         expect(msg).toBe("comment does not exist");
+       });
+   });
+});
