@@ -27,6 +27,11 @@ exports.selectArticles = ({ topic, order = "desc", sort_by = "created_at" }) => 
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
 
+  if (order !== "asc" && order !== "desc") {
+        return Promise.reject({ status: 400, msg: "Bad request" });
+ 
+  }
+
   let baseSqlString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at,
    articles.votes, articles.article_img_url, 
    COUNT (comments.article_id) AS comment_count 
@@ -49,13 +54,6 @@ exports.selectArticles = ({ topic, order = "desc", sort_by = "created_at" }) => 
 
 
   return db.query(baseSqlString, tableValues).then(({ rows }) => {
-    if (!rows.length) {
-      return Promise.reject({
-        status: 404,
-        msg: `No articles found`,
-      });
-
-    }
     return rows;
   });
 };

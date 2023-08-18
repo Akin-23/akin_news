@@ -515,13 +515,13 @@ describe("GET /api/articles?queries", () => {
       });
   });
 
-  test("GET: 404 if topic does not exist", () => {
+  test("GET: 200 expect empty array if topic does not exist", () => {
     return request(app)
       .get("/api/articles?topic=fans")
-      .expect(404)
+      .expect(200)
       .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("No articles found");
+        const { articles } = body;
+        expect(articles).toEqual([]);
       });
   });
 
@@ -534,6 +534,16 @@ describe("GET /api/articles?queries", () => {
         expect(msg).toBe('Bad request');
       });
   });
+
+   test("GET: 400 if order is not asc or desc", () => {
+     return request(app)
+       .get("/api/articles?order=bananas")
+       .expect(400)
+       .then(({ body }) => {
+         const { msg } = body;
+         expect(msg).toBe("Bad request");
+       });
+   });
 });
 
 
