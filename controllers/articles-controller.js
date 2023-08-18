@@ -13,6 +13,7 @@ exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
   selectArticle(article_id)
     .then((article) => {
+      article.comment_count = parseInt(article.comment_count);
       res.status(200).send({ article: article });
     })
     .catch((err) => {

@@ -1,4 +1,10 @@
-const { selectComments,createComment,removeComment,checkCommentExists } = require('../models/comments-model');
+const {
+  selectComments,
+  createComment,
+  removeComment,
+  checkCommentExists,
+  selectComment_count,
+} = require("../models/comments-model");
 const { checkArticleExists } = require("../models/articles-model");
 
 
@@ -41,5 +47,7 @@ exports.deleteComment = (req, res, next) => {
       next(err);
     });
 }
+
+
 
 

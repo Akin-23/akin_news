@@ -61,7 +61,19 @@ describe("/api/articles/:article_id", () => {
           "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
         );
       });
+    
   });
+
+   test("GET:200 specifc article now has the comment_count property", () => {
+     return request(app)
+       .get("/api/articles/1")
+       .expect(200)
+       .then(({ body }) => {
+         const { article } = body;
+         expect(article).toHaveProperty("comment_count", 11);
+       });
+   });
+
 
   test("GET:404 sends an appropriate error message when given a valid but non-existent id", () => {
     return request(app)
@@ -544,6 +556,9 @@ describe("GET /api/articles?queries", () => {
          expect(msg).toBe("Bad request");
        });
    });
-});
+});  
+
+
+
 
 

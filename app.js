@@ -3,7 +3,7 @@ const app = express();
 const { getTopics } = require("./controllers/topics-controller");
 const { getEndpoints } = require("./controllers/endpoints-controller");
 const { getArticle, getArticles,patchArticle} = require("./controllers/articles-controller");
-const { getComments, postComment, deleteComment } = require("./controllers/comments-controller");
+const { getComments,postComment,deleteComment,getComment_count} = require("./controllers/comments-controller");
 const { getUsers } = require("./controllers/users-controller");
 
 
