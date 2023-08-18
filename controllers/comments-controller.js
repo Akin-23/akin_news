@@ -1,4 +1,10 @@
-const { selectComments,createComment,removeComment,checkCommentExists } = require('../models/comments-model');
+const {
+  selectComments,
+  createComment,
+  removeComment,
+  checkCommentExists,
+  selectComment_count,
+} = require("../models/comments-model");
 const { checkArticleExists } = require("../models/articles-model");
 
 
@@ -41,5 +47,23 @@ exports.deleteComment = (req, res, next) => {
       next(err);
     });
 }
+
+exports.getComment_count = (req, res, next) => {
+  const { article_id } = req.params;
+  const promises = [
+    selectComment_count(article_id),
+    checkArticleExists(article_id),
+  ];
+  Promise.all(promises)
+    .then((resolvedPromises) => {
+      const comment_count = resolvedPromises[0];
+      const intcomment_count = parseInt(comment_count.comment_count);
+      res.status(200).send({ comment_count: intcomment_count });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 
 

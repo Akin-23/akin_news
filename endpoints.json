@@ -111,5 +111,13 @@
         }
       ]
     }
+  },
+
+  "GET /api/articles/comment_count": {
+    "description": "responds with the comment_count for the particular article",
+    "queries": [],
+    "exampleResponse": {
+      "comment_count": 11
+    }
   }
 }
