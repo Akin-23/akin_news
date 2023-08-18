@@ -3,7 +3,6 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index.js");
 const app = require("../app.js");
-const fs = require("fs/promises");
 const endpointObj = require("/Users/peterakin-nibosun/northcoders/backend/be-nc-news/endpoints.json");
 
 beforeEach(() => seed(data));
@@ -28,7 +27,7 @@ describe("/api/topics", () => {
 });
 
 describe("/api", () => {
-  test("GET:200 sends object describing all the available endpoints in API", () => {
+  test("GET:200 sends object describing all the available endpoints in api", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -103,10 +102,11 @@ describe("GET /api/articles", () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(Array.isArray(articles)).toBe(true);
+        expect(articles.length).toBe(13);
         expect(articles).toBeSortedBy("created_at", { descending: true });
         articles.forEach((article) => {
           if (article.article_id === 1) {
-            expect(article.comment_count).toBe(11);
+            expect(article.comment_count).toBe(11);  
           }
           expect(article).toHaveProperty("title", expect.any(String));
           expect(article).toHaveProperty("author", expect.any(String));
@@ -431,3 +431,109 @@ describe("/api/comments/:comment_id", () => {
   });
 
 });
+
+describe("/api/users", () => {
+  test("GET:200 an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(Array.isArray(users)).toBe(true);
+        expect(users.length).toBe(4);
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username"), expect.any(String);
+          expect(user).toHaveProperty("name", expect.any(String));
+          expect(user).toHaveProperty("avatar_url", expect.any(String));
+        });
+      });
+  });
+});
+
+describe("GET /api/articles?queries", () => {
+  test("GET: 200, articles are filtered by topics when passed a topic query", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+        expect(articles.length).toBe(1);
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("title", expect.any(String));
+          expect(article).toHaveProperty("author", expect.any(String));
+          expect(article).toHaveProperty("article_id", expect.any(Number));
+          expect(article).toHaveProperty("topic", "cats");
+          expect(article).toHaveProperty("created_at", expect.any(String));
+          expect(article).toHaveProperty("votes", expect.any(Number));
+          expect(article).toHaveProperty("article_img_url", expect.any(String));
+          expect(article).toHaveProperty("comment_count", expect.any(Number));
+          expect(article).not.toHaveProperty("body");
+        });
+      });
+  });
+  test("GET: 200, article is ordered by another column thats not created_at", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("author", { descending: true });
+      });
+  });
+
+  test("GET: 200, article is passed two queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("title");
+      });  
+  });
+
+   test("GET: 200, article is passed three queries", () => {
+     return request(app)
+       .get("/api/articles?sort_by=votes&order=asc&topic=mitch")
+       .expect(200)
+       .then(({ body }) => {
+         const { articles } = body;
+         expect(articles).toBeSortedBy("votes");
+         expect(articles.length).toBe(12);
+         articles.forEach((article) => expect(article.topic).toBe("mitch"));
+       });
+   });
+  
+  test("GET: 200, article is passed article_id query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("article_id");
+        expect(articles.length).toBe(13);
+      });
+  });
+
+  test("GET: 404 if topic does not exist", () => {
+    return request(app)
+      .get("/api/articles?topic=fans")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("No articles found");
+      });
+  });
+
+  test("GET: 400 if sort_by is not valid", () => {
+    return request(app)
+      .get("/api/articles?sort_by=1")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request');
+      });
+  });
+});
+
+

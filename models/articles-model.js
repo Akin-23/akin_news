@@ -11,33 +11,56 @@ exports.selectArticle = (article_id) => {
     });
 };
 
-exports.selectArticles = (topic) => {
-  return db
-    .query(
-      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at,
-   articles.votes, articles.article_img_url, COUNT (comments.article_id) AS comment_count FROM articles JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id 
-   ORDER BY articles.created_at DESC;`
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
+exports.selectArticles = ({ topic, order = "desc", sort_by = "created_at" }) => {
+
+  const sortByOptions = [
+    "created_at",
+    "title",
+    "author",
+    "article_id",
+    "topic",
+    "votes",
+  ];
+  const tableValues = [];
+
+  if (!sortByOptions.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  let baseSqlString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at,
+   articles.votes, articles.article_img_url, 
+   COUNT (comments.article_id) AS comment_count 
+   FROM articles 
+   LEFT JOIN comments ON articles.article_id = comments.article_id `;
+
+  if (topic) {
+    baseSqlString += `WHERE articles.topic = $1 `;
+    tableValues.push(topic);
+  }
+
+
+  if (order === 'asc') {
+    baseSqlString += `GROUP BY articles.article_id
+   ORDER BY articles.${sort_by} ASC;`;
+  } else {
+     baseSqlString += `GROUP BY articles.article_id
+   ORDER BY articles.${sort_by} DESC;`;
+  }
+
+
+  return db.query(baseSqlString, tableValues).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({
+        status: 404,
+        msg: `No articles found`,
+      });
+
+    }
+    return rows;
+  });
 };
 
-exports.selectComments = (article_id) => {
-  
-  return db
-    .query(
-      `SELECT comments.* FROM comments
-       WHERE 
-       comments.article_id = $1
-       ORDER BY
-       comments.created_at DESC;`,
-      [article_id]
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
-};
+
 
 exports.checkArticleExists = (article_id) => {
   return db
@@ -75,56 +98,5 @@ exports.updateArticle = ({ inc_votes }, article_id) => {
       return rows[0];
     });
 };
-//     article_id =$1`,[article_id]
-//   ).then(({ rows }) => {
-//     if (!rows.length) {
-//       return Promise.reject({status:404, msg: "article does not exist"})
-//     }
-    
-//   })
-// }
 
-//   exports.checkCommentExists = (comment_id) => {
-//     return db.query(
-//       `SELECT * FROM comments
-//     WHERE 
-//     comment_id =$1`,
-//       [comment_id]
-//     ).then(({ rows }) => {
-//       if (!rows.length) {
-//         return Promise.reject({ status: 404, msg: "comment does not exist" });
-//       }
-//     })
-//   };
 
-// exports.removeComment = (comment_id) => {
-//   return db.query(
-//     `DELETE FROM comments 
-//     WHERE comment_id =$1`, [comment_id]
-//   ).then(({ rows }) => {
-//     return rows[0];
-
-//   })
-//   }
-
-  exports.checkCommentExists = (comment_id) => {
-    return db.query(
-      `SELECT * FROM comments
-    WHERE 
-    comment_id =$1`,
-      [comment_id]
-    ).then(({ rows }) => {
-      if (!rows.length) {
-        return Promise.reject({ status: 404, msg: "comment does not exist" });
-      }
-    })
-  };
-
-exports.removeComment = (comment_id) => {
-  return db.query(
-    `DELETE FROM comments 
-    WHERE comment_id =$1`, [comment_id]
-  ).then(({ rows }) => {
-    return rows;
-  })
-  }

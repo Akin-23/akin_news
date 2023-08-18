@@ -21,15 +21,14 @@ exports.getArticle = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { topic } = req.query;
-  selectArticles(topic)
+  parameters = req.query;
+  selectArticles(parameters)
     .then((articles) => {
       const formattedArticles = formatCommentCount(articles);
 
       res.status(200).send({ articles: formattedArticles });
     })
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };
@@ -49,28 +48,3 @@ exports.patchArticle = (req, res, next) => {
     });
 };
 
-exports.deleteComment = (req, res, next) => {
-  const { comment_id } = req.params;
-  const promises = [removeComment(comment_id), checkCommentExists(comment_id)];
-  Promise.all(promises)
-    .then(() => {
-
-      res.status(204).send("");
-    })
-    .catch((err) => {
-      next(err);
-    });
-}
-
-exports.deleteComment = (req, res, next) => {
-  const { comment_id } = req.params;
-  const promises = [removeComment(comment_id), checkCommentExists(comment_id)];
-  Promise.all(promises)
-    .then(() => {
-
-      res.status(204).send("");
-    })
-    .catch((err) => {
-      next(err);
-    });
-}
