@@ -61,7 +61,19 @@ describe("/api/articles/:article_id", () => {
           "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
         );
       });
+    
   });
+
+   test("GET:200 specifc article now has the comment_count property", () => {
+     return request(app)
+       .get("/api/articles/1")
+       .expect(200)
+       .then(({ body }) => {
+         const { article } = body;
+         expect(article).toHaveProperty("comment_count", 11);
+       });
+   });
+
 
   test("GET:404 sends an appropriate error message when given a valid but non-existent id", () => {
     return request(app)
@@ -546,49 +558,6 @@ describe("GET /api/articles?queries", () => {
    });
 });  
 
-
-describe("GET /api/articles/comment_count", () => {
-  test("GET:200 responds with comment_count", () => {
-    return request(app)
-      .get("/api/articles/1/comment_count")
-      .expect(200)
-      .then(({ body }) => {
-        const { comment_count } = body;
-        expect(comment_count).toBe(11);
-      });
-  });
-
-  test("GET:200 responds with comment_count zero when there are no comments", () => {
-    return request(app)
-      .get("/api/articles/2/comment_count")
-      .expect(200)
-      .then(({ body }) => {
-        const { comment_count } = body;
-        expect(comment_count).toBe(0);
-      });
-  });
-  
-  test("GET:404 when a vaild but non-existent article id is provided", () => {
-    return request(app)
-      .get("/api/articles/999/comment_count")
-      .expect(404)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("article does not exist");
-      });
-  });
-  
-  test("GET:400 when a invaild id is provided", () => {
-    return request(app)
-      .get("/api/articles/banana/comment_count")
-      .expect(400)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("Bad request");
-      });
-  });
-
-});
 
 
 

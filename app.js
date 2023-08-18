@@ -18,7 +18,6 @@ app.delete("/api/comments/:comment_id", deleteComment)
 app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", patchArticle);
 app.get("/api/users", getUsers);
-app.get("/api/articles/:article_id/comment_count", getComment_count);
 
 
 app.all('/*', (req, res) => {

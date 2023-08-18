@@ -57,17 +57,6 @@ exports.createComment = ({ username, body }, article_id) => {
       });
   };
 
-  exports.selectComment_count = (article_id) => {
-    return db
-      .query(
-        `SELECT COUNT(*) AS comment_count
-  FROM comments
-  WHERE article_id = $1;`,
-        [article_id]
-      )
-      .then(({ rows }) => {
-        return rows[0];
-      });
-  };
+  
   
 
