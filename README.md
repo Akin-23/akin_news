@@ -1,7 +1,7 @@
 # Akin News API
 
 Introduction:
-Introducing the Akin News API: Engineered for seamless data handling, our dynamic API effortlessly retrieves and shares app information programmatically. Influenced by robust backend frameworks, it seamlessly integrates with frontends, ensuring smooth, structured data presentation for a seamless user experience.
+Introducing the Akin News API: Engineered for seamless data handling, my dynamic API effortlessly retrieves and shares app information programmatically. Influenced by robust backend frameworks, it seamlessly integrates with frontends, ensuring smooth, structured data presentation for a seamless user experience.
 
 Hosted Version:
 https://akinapplication.onrender.com/api
