@@ -11,7 +11,7 @@ exports.selectArticle = (article_id) => {
     });
 };
 
-exports.selectArticles = () => {
+exports.selectArticles = (topic) => {
   return db
     .query(
       `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at,

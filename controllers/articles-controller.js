@@ -21,13 +21,15 @@ exports.getArticle = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  const { topic } = req.query;
+  selectArticles(topic)
     .then((articles) => {
       const formattedArticles = formatCommentCount(articles);
 
       res.status(200).send({ articles: formattedArticles });
     })
     .catch((err) => {
+      console.log(err);
       next(err);
     });
 };
