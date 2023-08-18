@@ -21,7 +21,8 @@ exports.getArticle = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  parameters = req.query;
+  selectArticles(parameters)
     .then((articles) => {
       const formattedArticles = formatCommentCount(articles);
 
