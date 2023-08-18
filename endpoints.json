@@ -16,7 +16,7 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles in descending ordergi",
+    "description": "serves an array of all articles in descending order",
     "queries": [],
     "exampleResponse": {
       "articles": [
@@ -35,32 +35,31 @@
   },
 
   "GET /api/articles/:article_id": {
-      "description": "Responds with an article object",
-      "queries": [],
-      "exampleResponse": {
-        "author": "butter_bridge",
-        "title": "Living in the shadow of a great man",
-        "article_id": 1,
-        "body": "I find this existence challenging",
-        "topic": "mitch",
-        "created_at": "020-07-09T20:11:00.000Z",
-        "votes": 5,
-        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
-      }
+    "description": "Responds with an article object",
+    "queries": [],
+    "exampleResponse": {
+      "author": "butter_bridge",
+      "title": "Living in the shadow of a great man",
+      "article_id": 1,
+      "body": "I find this existence challenging",
+      "topic": "mitch",
+      "created_at": "020-07-09T20:11:00.000Z",
+      "votes": 5,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
   },
 
-
   "GET /api/articles/:article_id/comments": {
-      "description": "Responds with an array of comments associated with this particular id, most recent comments are first",
-      "queries": [],
-      "exampleResponse": {
-        "comment_id": 2,
-        "article_id": 1,
-        "body": "I find this existence challenging",
-        "created_at": "020-07-09T20:11:00.000Z",
-        "votes": 5,
-        "author": "Mr bean"
-      }
+    "description": "Responds with an array of comments associated with this particular id, most recent comments are first",
+    "queries": [],
+    "exampleResponse": {
+      "comment_id": 2,
+      "article_id": 1,
+      "body": "I find this existence challenging",
+      "created_at": "020-07-09T20:11:00.000Z",
+      "votes": 5,
+      "author": "Mr bean"
+    }
   },
 
   "PATCH /api/articles/:article_id": {
@@ -78,29 +77,39 @@
     }
   },
 
-
   "POST /api/articles/:article_id/comments": {
     "article": {
       "description": "Add a comment for an article",
       "queries": [],
       "exampleResponse": {
-      "comment_id" : 19,
-      "body": "test body comment",
-      "article_id": 1,
-      "author": "rogersop",
-      "votes": 0,
-      "created_at": "2023-08-16T13:20:59.606Z"
-    }
+        "comment_id": 19,
+        "body": "test body comment",
+        "article_id": 1,
+        "author": "rogersop",
+        "votes": 0,
+        "created_at": "2023-08-16T13:20:59.606Z"
       }
-    },
+    }
+  },
 
   "DELETE /api/comments/:comment_id": {
     "article": {
       "description": "delete a comment with the provided comment_id",
       "queries": [],
-      "exampleResponse": {
-      }
+      "exampleResponse": {}
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of user objects",
+    "queries": [],
+    "exampleResponse": {
+      "articles": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
     }
   }
-
 }

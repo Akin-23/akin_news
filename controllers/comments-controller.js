@@ -1,6 +1,6 @@
-const { selectComments,createComment } = require('../models/comments-model');
+const { selectComments,createComment,removeComment,checkCommentExists } = require('../models/comments-model');
 const { checkArticleExists } = require("../models/articles-model");
-const { checkUserExists } = require("../models/users-model");
+
 
 
 
@@ -28,4 +28,18 @@ exports.postComment = (req, res, next) => {
         next(err);
       });
 };
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const promises = [removeComment(comment_id), checkCommentExists(comment_id)];
+  Promise.all(promises)
+    .then(() => {
+
+      res.status(204).send("");
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
 

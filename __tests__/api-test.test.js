@@ -3,7 +3,6 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index.js");
 const app = require("../app.js");
-const fs = require("fs/promises");
 const endpointObj = require("/Users/peterakin-nibosun/northcoders/backend/be-nc-news/endpoints.json");
 
 beforeEach(() => seed(data));
@@ -28,7 +27,7 @@ describe("/api/topics", () => {
 });
 
 describe("/api", () => {
-  test("GET:200 sends object describing all the available endpoints in API", () => {
+  test("GET:200 sends object describing all the available endpoints in api", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -427,6 +426,24 @@ describe("/api/comments/:comment_id", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe("comment does not exist");
+      });
+  });
+});
+
+describe("/api/users", () => {
+  test("GET:200 an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(Array.isArray(users)).toBe(true);
+        expect(users.length).toBe(4);
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username"), expect.any(String);
+          expect(user).toHaveProperty("name", expect.any(String));
+          expect(user).toHaveProperty("avatar_url", expect.any(String));
+        });
       });
   });
 });
