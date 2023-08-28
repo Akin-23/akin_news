@@ -2,7 +2,7 @@
 
 ## Back End RESTful API
 
-Akin News API is a news aggregation demo loosely based on Reddit. This API was built during week six of the [Northcoders' Full Stack Developer Course](https://northcoders.com/).
+Akin News API is a news aggregation demo loosely based on Reddit. This API was built during week seven of the [Northcoders' Full Stack Developer Course](https://northcoders.com/).
 
 This project aims to demonstrate some of the skills learnt in four weeks of back end study including:
 
