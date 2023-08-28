@@ -26,7 +26,7 @@ describe("/api/topics", () => {
   });
 });
 
-describe("/api", () => {
+describe("/", () => {
   test("GET:200 sends object describing all the available endpoints in api", () => {
     return request(app)
       .get("/api")
