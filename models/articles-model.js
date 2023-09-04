@@ -51,12 +51,20 @@ exports.selectArticles = ({ topic, order = "desc", sort_by = "created_at" }) => 
   }
 
 
-  if (order === 'asc') {
+  if (order === 'asc' && sort_by !== 'comment_count') {
     baseSqlString += `GROUP BY articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url
    ORDER BY articles.${sort_by} ASC;`;
-  } else {
+  } else if (order === 'desc' && sort_by !== 'comment_count') {
      baseSqlString += `GROUP BY articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url
    ORDER BY articles.${sort_by} DESC;`;
+  }
+
+  if (order === "asc" && sort_by === "comment_count") {
+    baseSqlString += `GROUP BY articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url
+   ORDER BY ${sort_by} ASC;`;
+  } else if (order === "desc" && sort_by === "comment_count") {
+    baseSqlString += `GROUP BY articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url
+   ORDER BY ${sort_by} DESC;`;
   }
 
 
