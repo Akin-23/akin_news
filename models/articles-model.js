@@ -26,6 +26,7 @@ exports.selectArticles = ({ topic, order = "desc", sort_by = "created_at" }) => 
     "article_id",
     "topic",
     "votes",
+    "comment_count"
   ];
   const tableValues = [];
 
