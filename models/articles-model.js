@@ -52,10 +52,10 @@ exports.selectArticles = ({ topic, order = "desc", sort_by = "created_at" }) => 
 
 
   if (order === 'asc') {
-    baseSqlString += `GROUP BY articles.article_id
+    baseSqlString += `GROUP BY articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url
    ORDER BY articles.${sort_by} ASC;`;
   } else {
-     baseSqlString += `GROUP BY articles.article_id
+     baseSqlString += `GROUP BY articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url
    ORDER BY articles.${sort_by} DESC;`;
   }
 
