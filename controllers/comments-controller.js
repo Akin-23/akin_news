@@ -3,7 +3,6 @@ const {
   createComment,
   removeComment,
   checkCommentExists,
-  selectComment_count,
 } = require("../models/comments-model");
 const { checkArticleExists } = require("../models/articles-model");
 
